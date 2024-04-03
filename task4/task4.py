@@ -67,18 +67,20 @@ class Linear:
             n_it += 1
             prev_x = curr_x
             curr_x = np.matmul(np.matmul(np.linalg.inv(e-h_l), h_r), prev_x) + np.matmul(np.linalg.inv(e-h_l), g)
-        print(n_it)
         return curr_x, n_it
+
 
 def get_big_mat(n):
     mat = np.array([[0 for _ in range(n)] for _ in range(n)], dtype='d')
     k = 10
     for i in range(n):
-        for j in range(n):
+        for j in range(i, n):
             if i==j:
                 mat[i][j] = random.randint(k*n+1, k*2*n)
             else:
-                mat[i][j] = random.randint(-k, k)
+                value = random.randint(-k, k)
+                mat[i][j] = value
+                mat[j][i] = value
     return mat
 
 # a = np.array([[2, 0, 1], [0, 2, 0], [0, 1, 2]], dtype='d')
