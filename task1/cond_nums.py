@@ -77,7 +77,7 @@ def compare_solutions(A, B, delta):
 
 
 def get_hilbert_matrix(n):
-    return [[1 / (i + j + 1) for j in range(n)] for i in range(n)]
+    return np.array([[1 / (i + j + 1) for j in range(n)] for i in range(n)], dtype='d')
 
 
 def random_good_mat(n, min, max):
@@ -87,7 +87,7 @@ def random_good_mat(n, min, max):
     for i in range(1, n):
         mat[i][i - 1] = random.randint(-1, 1)
         mat[i - 1][i] = random.randint(-1, 1)
-    return mat
+    return np.array(mat, dtype='d')
 
 
 vols = []

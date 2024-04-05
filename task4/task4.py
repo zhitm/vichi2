@@ -52,10 +52,9 @@ class Linear:
             n_it += 1
             prev_x = curr_x
             curr_x = np.matmul(H, prev_x) + g
-        print(n_it)
         return curr_x, n_it
 
-    def zaidel_solve(self):
+    def seidel_solve(self):
         h, g = self.get_h_g_form()
         h_l = self.get_l(h)
         h_r = self.get_r(h)
@@ -83,52 +82,73 @@ def get_big_mat(n):
                 mat[j][i] = value
     return mat
 
-# a = np.array([[2, 0, 1], [0, 2, 0], [0, 1, 2]], dtype='d')
-# b = np.array([1, 1, 1], dtype='d')
-# solver = Linear(a, b, 0.1)
-# s1, _ = solver.solve()
-# print(s1)
-# s2 = np.linalg.solve(a, b)
-# print(s2)
-# print(np.linalg.norm(s1 - s2))
-# s3, _ = solver.zaidel_solve()
-# print(s3)
-# print(np.linalg.norm(s1-s3))
+if (__name__ == "__main__"):
+    mat_size = []
+    eps_arr = []
+    it1_arr = []
+    it2_arr = []
+    diff1 = []
+    diff2 = []
+    for i in range(5):
+        eps = 10**(-5)
+        t=300
+        mat_size.append(t)
+        eps_arr.append(eps)
+        a = get_big_mat(t)
+        b = np.array([1 for _ in range(t)], dtype='d')
+        solver = Linear(a, b, eps)
+        solution = np.linalg.solve(a, b)
+        my_solution, it = solver.solve()
 
-mat_size = []
-eps_arr = []
-it1_arr = []
-it2_arr = []
-diff1 = []
-diff2 = []
-for i in range(10):
-    eps = 10**(-10)
-    t=300
-    mat_size.append(t)
-    eps_arr.append(eps)
-    a = get_big_mat(t)
-    b = np.array([1 for _ in range(t)], dtype='d')
-    solver = Linear(a, b, eps)
-    solution = np.linalg.solve(a, b)
-    my_solution, it = solver.solve()
+        my_solution_z, it_z = solver.seidel_solve()
+        it1_arr.append(it)
+        it2_arr.append(it_z)
+        diff1.append(np.linalg.norm(solution-my_solution))
+        diff2.append(np.linalg.norm(solution-my_solution_z))
 
-    my_solution_z, it_z = solver.zaidel_solve()
-    it1_arr.append(it)
-    it2_arr.append(it_z)
-    diff1.append(np.linalg.norm(solution-my_solution))
-    diff2.append(np.linalg.norm(solution-my_solution_z))
+    for i in range(5):
+        eps = 10**(-10)
+        t=300
+        mat_size.append(t)
+        eps_arr.append(eps)
+        a = get_big_mat(t)
+        b = np.array([1 for _ in range(t)], dtype='d')
+        solver = Linear(a, b, eps)
+        solution = np.linalg.solve(a, b)
+        my_solution, it = solver.solve()
 
-
+        my_solution_z, it_z = solver.seidel_solve()
+        it1_arr.append(it)
+        it2_arr.append(it_z)
+        diff1.append(np.linalg.norm(solution-my_solution))
+        diff2.append(np.linalg.norm(solution-my_solution_z))
 
 
-df = pd.DataFrame(
-    {'Matix size': mat_size,
-     'eps': eps_arr,
-     'Iteration count: simple iteration': it1_arr,
-     'Iteration count: Zaidel': it2_arr,
-     'diff1': diff1,
-     'diff2': diff2,
-     },
-    )
+    for i in range(5):
+        eps = 10**(-15)
+        t=300
+        mat_size.append(t)
+        eps_arr.append(eps)
+        a = get_big_mat(t)
+        b = np.array([1 for _ in range(t)], dtype='d')
+        solver = Linear(a, b, eps)
+        solution = np.linalg.solve(a, b)
+        my_solution, it = solver.solve()
 
-print(tabulate(df, headers='keys', tablefmt='psql'))
+        my_solution_z, it_z = solver.seidel_solve()
+        it1_arr.append(it)
+        it2_arr.append(it_z)
+        diff1.append(np.linalg.norm(solution-my_solution))
+        diff2.append(np.linalg.norm(solution-my_solution_z))
+
+    df = pd.DataFrame(
+        {'Matix size': mat_size,
+         'eps': eps_arr,
+         'Iteration count: simple iteration': it1_arr,
+         'Iteration count: Seidel': it2_arr,
+         'diff1': diff1,
+         'diff2': diff2,
+         },
+        )
+
+    print(tabulate(df, headers='keys', tablefmt='psql'))

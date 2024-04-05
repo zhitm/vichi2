@@ -2,9 +2,9 @@ import numpy as np
 import pandas as pd
 from tabulate import tabulate
 
-from task1.cond_nums import volume_number
-from task1.cond_nums import get_hilbert_matrix
-from task1.cond_nums import random_good_mat
+from vichi2.task1.cond_nums import volume_number, get_hilbert_matrix, random_good_mat
+
+
 def get_rot_m(mat, i, j):
     n = len(mat)
     rot_mat = np.array([[0 for _ in range(n)] for _ in range(n)], dtype='d')
@@ -77,7 +77,7 @@ def fill_arr(A, B):
     arr_solutions.append(np.linalg.solve(A, B))
     arr_diff.append(compare_solutions(A, B))
     vols.append(volume_number(A))
-    vols_after.append(volume_number(transform_equation(A,B)[0]))
+    vols_after.append(volume_number(transform_equation(A, B)[0]))
 
 if (__name__ == "__main__"):
 
