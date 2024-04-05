@@ -46,10 +46,7 @@ it2 = []
 np_eig = []
 diff1 = []
 diff2 = []
-np.set_printoptions(precision=20, floatmode='fixed')
 def process(eps_pow):
-    np.set_printoptions(precision=20, floatmode='fixed')
-
     for i in range(1, 10):
         eps = 10 ** (-eps_pow)
         t = 3*i
@@ -67,26 +64,26 @@ def process(eps_pow):
         diff1.append(abs(pow-eig3))
         diff2.append(abs(scal-eig3))
 
+if __name__ == "__main__":
+    process(5)
+    process(10)
+    process(15)
+    process(18)
 
-process(5)
-process(10)
-process(15)
-process(18)
 
+    pd.set_option("display.precision", 10)
 
-pd.set_option("display.precision", 10)
+    df = pd.DataFrame(
+        {'Matix size': mat_size,
+         'Степенной метод' : eig_1,
+         'Число итераций, степенной' : it1,
+         'Скалярный метод' : eig_2,
+         'Число итераций, скалярный': it2,
+         'eps': eps_arr,
+        'numpy': np_eig,
+         'd1' : diff1,
+         'd2': diff2
+         },
+    )
 
-df = pd.DataFrame(
-    {'Matix size': mat_size,
-     'Степенной метод' : eig_1,
-     'Число итераций, степенной' : it1,
-     'Скалярный метод' : eig_2,
-     'Число итераций, скалярный': it2,
-     'eps': eps_arr,
-    'numpy': np_eig,
-     'd1' : diff1,
-     'd2': diff2
-     },
-)
-
-print(tabulate(df, headers='keys', tablefmt='psql'))
+    print(tabulate(df, headers='keys', tablefmt='psql'))
